@@ -1,0 +1,7 @@
+package com.weekfourproject;
+
+public class ProductApplication {
+	public static void main(String[] args) {
+		// TODO Some stuff
+	}
+}
