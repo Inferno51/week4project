@@ -51,7 +51,8 @@ public class AddToDB extends HttpServlet {
 		addToDB.setMovieDesc(request.getParameter("product_desc"));
 
 		com.weekfourproject.DAO.writeToDatabase(addToDB);
-
+		
+		request.getRequestDispatcher("insert.html").forward(request,response);
 	}
 
 }

@@ -44,10 +44,10 @@ public class DeleteFromDB extends HttpServlet {
 		
 		deleteFromDB.setMovieID(productID);
 		
-		
-		
 		com.weekfourproject.DAO.deleteFromDatabase(deleteFromDB);
 		
+		request.getRequestDispatcher("delete.html").forward(request,response);
 	}
-
+	
+	
 }
