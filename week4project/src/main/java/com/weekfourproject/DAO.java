@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DAO {
-	
+	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/?user=root&autoReconnect=true&useSSL=false";
 	static final String USER = "root";
 	static final String PASSWORD = "sesame";
@@ -18,10 +18,13 @@ public class DAO {
 	public static void connToDB() {
 		
 		try {
+			
+			Class.forName(JDBC_DRIVER);
+			
 			System.out.println("Attempting connection to database...");
 			CONN = DriverManager.getConnection(DB_URL, USER, PASSWORD);
 			System.out.println("Connected to the database!");
-		} catch (SQLException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			System.out.println("Database connection failed.");
 			e.printStackTrace();
 		} //try statement
@@ -39,7 +42,7 @@ public class DAO {
 			
 			while (RES_SET.next()) {
 				Product ourProduct = new Product();
-				ourProduct.setMovieID(RES_SET.getString("movie_id"));
+				ourProduct.setMovieID(RES_SET.getInt("movie_id"));
 				ourProduct.setMovieName(RES_SET.getString("movie_name"));
 				ourProduct.setMoviePrice(RES_SET.getDouble("movie_price"));
 				ourProduct.setMovieCount(RES_SET.getInt("movie_inv_count"));
@@ -57,11 +60,11 @@ public class DAO {
 		}
 	} // readFromDB
 	
-	public static void writeToDatabase() {
+	public static void writeToDatabase(Product product) {
 		
 		Product productToAdd = new Product();
 		
-		productToAdd = aboutTheProduct();
+		productToAdd = product;
 		
 		try {
 			connToDB();
@@ -82,34 +85,64 @@ public class DAO {
 		}
 	} // writeToDatabase
 	
-	/* public static void deleteFromDatabase() {
-		Scanner sc = new Scanner(System.in);
-		connToDB();
+	
+	
+	public static void deleteFromDatabase(Product product) {
+//		Scanner sc = new Scanner(System.in);
+//		
+//		System.out.println("What is the product ID you would like to delete?\n");
+//		String deleteID = sc.nextLine();
 		
-		System.out.println("What is the product ID you would like to delete?\n");
-		String deleteID = sc.nextLine();
+		Product productToDelete = new Product();
+		
+		productToDelete = product;
 		
 		try {
+			connToDB();
+			
 			PREP_STMT=CONN.prepareStatement("DELETE FROM products.movies WHERE movie_id = ?");
-			PREP_STMT.setString(1, deleteID);
+			PREP_STMT.setInt(1, productToDelete.getMovieID());
 			PREP_STMT.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
+		}
+//		sc.close();
 	} // deleteFromDatabase
 	
-	public static void updateDatabase() {
+	
+	
+	
+	
+	
+	public static void updateDB() {
 		Scanner sc = new Scanner(System.in);
-		connToDB();
-		
-		System.out.println("What is the product ID you would like to update?\n");
-		int idNumber = Integer.parseInt(sc.nextLine());
+		readFromDB();
+		System.out.println("Please enter the ID number of the product you would like to update.");
+		int updateProductID = Integer.parseInt(sc.nextLine());
 		
 		Product productToUpdate = new Product();
 		
-		productToUpdate = 
-		
-	} */
+
+		try {
+
+			PREP_STMT = CONN.prepareStatement(updateDB);
+			
+			PREP_STMT.setString(1, productToUpdate.getMovieName());
+			PREP_STMT.setDouble(2, productToUpdate.getMoviePrice());
+			PREP_STMT.setInt(3, productToUpdate.getMovieCount());
+			PREP_STMT.setString(4, productToUpdate.getMovieDesc());
+			PREP_STMT.setInt(5, updateProductID);
+
+			PREP_STMT.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		sc.close();
+	} // update DB Method
+	
+	
+	private static String updateDB = ("UPDATE `products`.`movies` SET `movie_name` = ?, `movie_price` = ?, `movie_inv_count` = ?, `movie_desc` = ? WHERE `movie_id` = ?");
 	
 	
 	private static String insertIntoTable = "INSERT INTO `products`.`movies`"
@@ -117,27 +150,27 @@ public class DAO {
 			+ "VALUES"
 			+ "(?, ?, ?, ?)";
 	
-	private static Product aboutTheProduct() {
-		Scanner sc = new Scanner (System.in);
-		
-		Product productToAdd = new Product();
-		
-		System.out.println("What is the product's name?\n");
-		productToAdd.setMovieName(sc.nextLine());
-		
-		System.out.println("What is the product's price?\n");
-		String priceInput = sc.nextLine();
-		productToAdd.setMoviePrice(Double.parseDouble(priceInput));
-		
-		System.out.println("How many would you like to add to the database?\n");
-		String countInput = sc.nextLine();
-		productToAdd.setMovieCount(Integer.parseInt(countInput));
-		
-		System.out.println("Please add a description of the product.\n");
-		productToAdd.setMovieDesc(sc.nextLine());
-		
-		sc.close();
-		return productToAdd;
-	} // aboutTheProduct
+//	private static Product aboutTheProduct() {
+//		Scanner sc = new Scanner (System.in);
+//		
+//		Product productToAdd = new Product();
+//		
+//		System.out.println("What is the product's name?\n");
+//		productToAdd.setMovieName(sc.nextLine());
+//		
+//		System.out.println("What is the product's price?\n");
+//		String priceInput = sc.nextLine();
+//		productToAdd.setMoviePrice(Double.parseDouble(priceInput));
+//		
+//		System.out.println("How many would you like to add to the database?\n");
+//		String countInput = sc.nextLine();
+//		productToAdd.setMovieCount(Integer.parseInt(countInput));
+//		
+//		System.out.println("Please add a description of the product.\n");
+//		productToAdd.setMovieDesc(sc.nextLine());
+//		
+//		sc.close();
+//		return productToAdd;
+//	} // aboutTheProduct
 	
 } // class

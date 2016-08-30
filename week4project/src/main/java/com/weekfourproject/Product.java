@@ -2,9 +2,9 @@ package com.weekfourproject;
 
 public class Product {
 	
-	private String movieID = null;
+	private int movieID = 0;
 	private String movieName = null;
-	private double moviePrice = 0.0;
+	private double moviePrice = 0.0d;
 	private int movieCount = 0;
 	private String movieDesc = null;
 	
@@ -16,13 +16,13 @@ public class Product {
 
 	
 	// Getters and setters.
-	public String getMovieID() {
+	public int getMovieID() {
 		return movieID;
 	}
 
 
-	public void setMovieID(String movieID) {
-		this.movieID = movieID;
+	public void setMovieID(int productID) {
+		this.movieID = productID;
 	}
 
 

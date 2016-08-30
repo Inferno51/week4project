@@ -14,7 +14,9 @@ public class ProductApplication {
 		do {
 			System.out.println("Please make a Selection:\n"
 					+ "1. View the database.\n"
-					+ "2. Add record to database.\n");
+					+ "2. Add record to database.\n"
+					+ "3. Delete record from database.\n"
+					+ "4. Update a record in database.");
 			String userMenuInput = sc.nextLine();
 			
 			switch (userMenuInput) {
@@ -22,11 +24,14 @@ public class ProductApplication {
 				DAO.readFromDB();
 				break;
 			case "2":
-				DAO.writeToDatabase();
+				// DAO.writeToDatabase();
 				break;
-			/* case "3":
-				DAO.deleteFromDatabase();
-				break; */
+			case "3":
+				// DAO.deleteFromDatabase();
+				break;
+			case "4":
+				DAO.updateDB();
+				break;
 			default:
 				System.out.println("That is not a valid option, please input a valid choice.");
 				menuLoop = true;
